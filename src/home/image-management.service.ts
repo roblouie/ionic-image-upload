@@ -27,7 +27,7 @@ export class ImageManagementService {
       throw new PermissionError(`You don't have permission to use the image picker yet.`);
     }
     const imagePaths: string[] = await this.imagePicker.getPictures({});
-    const imageFiles = await this.realFileLoaderService.getMultipleImageFiles(imagePaths);
+    const imageFiles = await this.realFileLoaderService.getMultipleFiles(imagePaths);
     const formData = new FormData();
     imageFiles.forEach(file => formData.append('photos', file, file.name));
     return this.uploadImages(formData);
@@ -35,7 +35,7 @@ export class ImageManagementService {
 
   async uploadFromCamera() {
     const imagePath: string = await this.camera.getPicture(this.cameraOptions);
-    const imageFile = await this.realFileLoaderService.getSingleImageFile(imagePath);
+    const imageFile = await this.realFileLoaderService.getSingleFile(imagePath);
     const formData = new FormData();
     formData.append('photos', imageFile, imageFile.name);
     const result = await this.uploadImages(formData);

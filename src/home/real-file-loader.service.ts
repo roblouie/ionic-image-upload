@@ -6,42 +6,42 @@ export class RealFileLoaderService {
 
   constructor(private ionicFileService: IonicFileService) {}
 
-  async getMultipleImageFiles(imagePaths: string[]): Promise<File[]> {
+  async getMultipleFiles(filePaths: string[]): Promise<File[]> {
     // Get FileEntry array from the array of image paths
-    const fileEntryPromises: Promise<FileEntry>[] = imagePaths.map(imagePath => {
-      return this.ionicFileService.resolveLocalFilesystemUrl(imagePath);
+    const fileEntryPromises: Promise<FileEntry>[] = filePaths.map(filePath => {
+      return this.ionicFileService.resolveLocalFilesystemUrl(filePath);
     }) as Promise<FileEntry>[];
 
-    const imageEntries: FileEntry[] = await Promise.all(fileEntryPromises);
+    const fileEntries: FileEntry[] = await Promise.all(fileEntryPromises);
 
     // Get a File array from the FileEntry array. NOTE that while this looks like a regular File, it does
     // not have any actual data in it. Only after we use a FileReader will the File object contain the actual
     // file data
-    const imageCordovaFilePromises: Promise<IFile>[] = imageEntries.map(imageEntry => {
-      return this.convertFileEntryToCordovaFile(imageEntry);
+    const CordovaFilePromises: Promise<IFile>[] = fileEntries.map(fileEntry => {
+      return this.convertFileEntryToCordovaFile(fileEntry);
     });
 
-    const imageCordovaFiles: IFile[] = await Promise.all(imageCordovaFilePromises);
+    const cordovaFiles: IFile[] = await Promise.all(CordovaFilePromises);
 
     // Use FileReader on each File object to read the actual file data into the file object
-    const imageFilePromises: Promise<File>[] = imageCordovaFiles.map(cordovaFile => {
+    const filePromises: Promise<File>[] = cordovaFiles.map(cordovaFile => {
       return this.convertCordovaFileToJavascriptFile(cordovaFile)
     });
 
     // When this resolves, it will return a list of File objects, just as if you had used the regular web
     // file input. These can then be appended to FormData and uploaded.
-    return await Promise.all(imageFilePromises);
+    return await Promise.all(filePromises);
   }
 
-  async getSingleImageFile(imagePath: string): Promise<File> {
+  async getSingleFile(filePath: string): Promise<File> {
     // Get FileEntry from image path
-    const imageEntry: FileEntry = await this.ionicFileService.resolveLocalFilesystemUrl(imagePath) as FileEntry;
+    const fileEntry: FileEntry = await this.ionicFileService.resolveLocalFilesystemUrl(filePath) as FileEntry;
 
     // Get File from FileEntry. Again note that this file does not contain the actual file data yet.
-    const imageCordovaFile: IFile = await this.convertFileEntryToCordovaFile(imageEntry);
+    const cordovaFile: IFile = await this.convertFileEntryToCordovaFile(fileEntry);
 
     // Use FileReader on each object to populate it with the true file contents.
-    return this.convertCordovaFileToJavascriptFile(imageCordovaFile);
+    return this.convertCordovaFileToJavascriptFile(cordovaFile);
   }
 
   private convertFileEntryToCordovaFile(fileEntry: FileEntry): Promise<IFile> {
