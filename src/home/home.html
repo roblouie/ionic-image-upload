@@ -1,0 +1,30 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Ionicstagram
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-grid>
+    <ion-row>
+      <div ion-col col-4 class="image" *ngFor="let imagePath of imagePaths" [ngStyle]="{'background-image': 'url(' + imagePath + ')'}"></div>
+    </ion-row>
+  </ion-grid>
+
+  <input *ngIf="isDesktop" type="file" multiple (change)="uploadWebFile($event)" placeholder="upload a from web file"/>
+</ion-content>
+
+
+
+<ion-toolbar class="footer">
+  <button type="file" multiple ion-button icon-end (click)="uploadFromCamera()">
+    Take Photo
+    <ion-icon name="camera"></ion-icon>
+  </button>
+  <button ion-button icon-end (click)="uploadFromImagePicker()">
+    From Gallery
+    <ion-icon name="images"></ion-icon>
+  </button>
+</ion-toolbar>
