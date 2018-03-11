@@ -3,6 +3,15 @@
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
+  border: 1px solid white;
+}
+
+ion-header .toolbar-background {
+  background-color: color($colors, primary, base);
+}
+
+.toolbar-title {
+  color: white;
 }
 
 .footer {

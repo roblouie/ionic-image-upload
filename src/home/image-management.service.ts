@@ -7,7 +7,7 @@ import {PermissionError} from './permission-error';
 
 @Injectable()
 export class ImageManagementService {
-  private readonly baseUrl = 'http://e13b48bf.ngrok.io';
+  private readonly baseUrl = 'http://localhost:3000';
   private cameraOptions: CameraOptions = {
     quality: 100,
     destinationType: this.camera.DestinationType.FILE_URI,

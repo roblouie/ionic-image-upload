@@ -1,4 +1,4 @@
-<ion-header>
+<ion-header primary>
   <ion-navbar>
     <ion-title>
       Ionicstagram
@@ -6,7 +6,7 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content>
   <ion-grid>
     <ion-row>
       <div ion-col col-4 class="image" *ngFor="let imagePath of imagePaths" [ngStyle]="{'background-image': 'url(' + imagePath + ')'}"></div>
@@ -19,11 +19,11 @@
 
 
 <ion-toolbar class="footer">
-  <button type="file" multiple ion-button icon-end (click)="uploadFromCamera()">
+  <button type="file" multiple ion-button icon-end clear (click)="uploadFromCamera()">
     Take Photo
     <ion-icon name="camera"></ion-icon>
   </button>
-  <button ion-button icon-end (click)="uploadFromImagePicker()">
+  <button ion-button icon-end clear (click)="uploadFromImagePicker()">
     From Gallery
     <ion-icon name="images"></ion-icon>
   </button>
