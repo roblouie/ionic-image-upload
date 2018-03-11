@@ -1,14 +1,14 @@
 import {Component, OnInit} from '@angular/core';
 import {LoadingController, Platform} from 'ionic-angular';
 
-import {ImageManagementService} from './image-management.service';
-import {FilePathToJavaScriptFileConverter} from './file-path-to-js-file-converter';
-import {PermissionError} from './permission-error';
+import { ImageManagementService } from './image-management.service';
+import { PermissionError } from './permission-error';
+import { RealFileLoaderService } from './real-file-loader.service';
 
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html',
-  providers: [ImageManagementService, FilePathToJavaScriptFileConverter]
+  providers: [ImageManagementService, RealFileLoaderService]
 })
 export class HomePage implements OnInit{
   imagePaths: string[];

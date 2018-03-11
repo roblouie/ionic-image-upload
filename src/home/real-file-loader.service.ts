@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
-import { File as IonicFile, FileEntry, IFile } from '@ionic-native/file';
+import { File as IonicFileService, FileEntry, IFile } from '@ionic-native/file';
 
 @Injectable()
-export class FilePathToJavaScriptFileConverter {
+export class RealFileLoaderService {
 
-  constructor(private ionicFile: IonicFile) {}
+  constructor(private ionicFileService: IonicFileService) {}
 
   async getMultipleImageFiles(imagePaths: string[]): Promise<File[]> {
     // Get FileEntry array from the array of image paths
     const fileEntryPromises: Promise<FileEntry>[] = imagePaths.map(imagePath => {
-      return this.ionicFile.resolveLocalFilesystemUrl(imagePath);
+      return this.ionicFileService.resolveLocalFilesystemUrl(imagePath);
     }) as Promise<FileEntry>[];
 
     const imageEntries: FileEntry[] = await Promise.all(fileEntryPromises);
@@ -35,7 +35,7 @@ export class FilePathToJavaScriptFileConverter {
 
   async getSingleImageFile(imagePath: string): Promise<File> {
     // Get FileEntry from image path
-    const imageEntry: FileEntry = await this.ionicFile.resolveLocalFilesystemUrl(imagePath) as FileEntry;
+    const imageEntry: FileEntry = await this.ionicFileService.resolveLocalFilesystemUrl(imagePath) as FileEntry;
 
     // Get File from FileEntry. Again note that this file does not contain the actual file data yet.
     const imageCordovaFile: IFile = await this.convertFileEntryToCordovaFile(imageEntry);

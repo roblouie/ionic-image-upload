@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { ImagePicker } from '@ionic-native/image-picker';
-import { FilePathToJavaScriptFileConverter } from './file-path-to-js-file-converter';
-import {PermissionError} from './permission-error';
+import { PermissionError } from './permission-error';
+import { RealFileLoaderService } from './real-file-loader.service';
 
 @Injectable()
 export class ImageManagementService {
@@ -19,7 +19,7 @@ export class ImageManagementService {
     private httpClient: HttpClient,
     private camera: Camera,
     private imagePicker: ImagePicker,
-    private filePathToJavaScriptFileConverter: FilePathToJavaScriptFileConverter) {}
+    private realFileLoaderService: RealFileLoaderService) {}
 
   async uploadFromImagePicker(): Promise<any[]> {
     const hasPermission = await this.imagePicker.hasReadPermission();
@@ -27,7 +27,7 @@ export class ImageManagementService {
       throw new PermissionError(`You don't have permission to use the image picker yet.`);
     }
     const imagePaths: string[] = await this.imagePicker.getPictures({});
-    const imageFiles = await this.filePathToJavaScriptFileConverter.getMultipleImageFiles(imagePaths);
+    const imageFiles = await this.realFileLoaderService.getMultipleImageFiles(imagePaths);
     const formData = new FormData();
     imageFiles.forEach(file => formData.append('photos', file, file.name));
     return this.uploadImages(formData);
@@ -35,10 +35,12 @@ export class ImageManagementService {
 
   async uploadFromCamera() {
     const imagePath: string = await this.camera.getPicture(this.cameraOptions);
-    const imageFile = await this.filePathToJavaScriptFileConverter.getSingleImageFile(imagePath);
+    const imageFile = await this.realFileLoaderService.getSingleImageFile(imagePath);
     const formData = new FormData();
     formData.append('photos', imageFile, imageFile.name);
-    return this.uploadImages(formData);
+    const result = await this.uploadImages(formData);
+    await this.camera.cleanup();
+    return result;
   }
 
   uploadImages(formData: FormData): Promise<any[]> {
