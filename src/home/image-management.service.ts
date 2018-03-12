@@ -49,10 +49,6 @@ export class ImageManagementService {
 
   async listImagesOnServer(): Promise<string[]> {
     const imageNames = await this.httpClient.get<string[]>(`${this.baseUrl}/list-images`).toPromise();
-    return imageNames.map(imageName => this.getFullWebPathForImage(imageName));
-  }
-
-  private getFullWebPathForImage(imageName: string) {
-    return `${this.baseUrl}/images/${imageName}`;
+    return imageNames.map(imageName => `${this.baseUrl}/images/${imageName}`);
   }
 }

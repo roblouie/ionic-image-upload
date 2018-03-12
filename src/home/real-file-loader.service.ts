@@ -63,7 +63,6 @@ export class RealFileLoaderService {
           resolve(blob as File);
         }
       };
-
       reader.readAsArrayBuffer(cordovaFile);
     });
   }
